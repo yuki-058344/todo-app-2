@@ -1,0 +1,212 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--background);
+  font-family: var(--font-geist-sans);
+}
+
+.content {
+  width: 100%;
+  max-width: 600px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  color: #171717;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #ebebeb;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #171717;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #171717;
+}
+
+.button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #171717;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #383838;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.todoList {
+  min-height: 200px;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #666666;
+  font-size: 16px;
+  padding: 40px 0;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todoItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  margin-bottom: 12px;
+  background-color: #fafafa;
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.todoItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.todoText {
+  flex: 1;
+  font-size: 16px;
+  color: #171717;
+  line-height: 1.5;
+}
+
+.deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-left: 12px;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+  color: #666666;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.deleteButton:hover {
+  color: #ff4444;
+  background-color: rgba(255, 68, 68, 0.1);
+}
+
+.deleteButton:active {
+  transform: scale(0.9);
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 24px;
+  }
+
+  .title {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .form {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .content {
+    background-color: #0a0a0a;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  .title {
+    color: #ededed;
+  }
+
+  .input {
+    background-color: #171717;
+    border-color: #1a1a1a;
+    color: #ededed;
+  }
+
+  .input:focus {
+    border-color: #ededed;
+  }
+
+  .button {
+    background-color: #ededed;
+    color: #0a0a0a;
+  }
+
+  .button:hover {
+    background-color: #cccccc;
+  }
+
+  .emptyMessage {
+    color: #999999;
+  }
+
+  .todoItem {
+    background-color: #171717;
+    border-color: #1a1a1a;
+  }
+
+  .todoText {
+    color: #ededed;
+  }
+
+  .deleteButton {
+    color: #999999;
+  }
+
+  .deleteButton:hover {
+    color: #ff6666;
+    background-color: rgba(255, 102, 102, 0.2);
+  }
+
+  .todoItem:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+}
