@@ -21,10 +21,19 @@ export function useTodos() {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
+  const toggleTodo = (id: string) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
   return {
     todos,
     addTodo,
     deleteTodo,
+    toggleTodo,
   };
 }
 

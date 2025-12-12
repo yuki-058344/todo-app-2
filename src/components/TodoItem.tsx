@@ -4,16 +4,34 @@ import styles from '../app/page.module.css';
 interface TodoItemProps {
   todo: Todo;
   onDelete: (id: string) => void;
+  onToggle: (id: string) => void;
 }
 
-export function TodoItem({ todo, onDelete }: TodoItemProps) {
+export function TodoItem({ todo, onDelete, onToggle }: TodoItemProps) {
   const handleDelete = () => {
     onDelete(todo.id);
   };
 
+  const handleToggle = () => {
+    onToggle(todo.id);
+  };
+
   return (
     <li className={styles.todoItem}>
-      <span className={styles.todoText}>{todo.text}</span>
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={handleToggle}
+        className={styles.checkbox}
+        aria-label={todo.completed ? '未完了にする' : '完了にする'}
+      />
+      <span
+        className={`${styles.todoText} ${
+          todo.completed ? styles.completed : ''
+        }`}
+      >
+        {todo.text}
+      </span>
       <button
         onClick={handleDelete}
         className={styles.deleteButton}

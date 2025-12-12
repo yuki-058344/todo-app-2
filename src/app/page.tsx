@@ -8,14 +8,18 @@ import styles from './page.module.css';
 const APP_TITLE = 'TODOアプリ';
 
 export default function Home() {
-  const { todos, addTodo, deleteTodo } = useTodos();
+  const { todos, addTodo, deleteTodo, toggleTodo } = useTodos();
 
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <h1 className={styles.title}>{APP_TITLE}</h1>
         <TodoForm onAddTodo={addTodo} />
-        <TodoList todos={todos} onDeleteTodo={deleteTodo} />
+        <TodoList
+          todos={todos}
+          onDeleteTodo={deleteTodo}
+          onToggleTodo={toggleTodo}
+        />
       </div>
     </div>
   );

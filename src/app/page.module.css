@@ -94,6 +94,7 @@
   border: 1px solid #ebebeb;
   border-radius: 8px;
   transition: transform 0.2s, box-shadow 0.2s;
+  gap: 12px;
 }
 
 .todoItem:hover {
@@ -101,11 +102,24 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #171717;
+  flex-shrink: 0;
+}
+
 .todoText {
   flex: 1;
   font-size: 16px;
   color: #171717;
   line-height: 1.5;
+}
+
+.todoText.completed {
+  text-decoration: line-through;
+  color: #999999;
 }
 
 .deleteButton {
@@ -193,8 +207,16 @@
     border-color: #1a1a1a;
   }
 
+  .checkbox {
+    accent-color: #ededed;
+  }
+
   .todoText {
     color: #ededed;
+  }
+
+  .todoText.completed {
+    color: #666666;
   }
 
   .deleteButton {
