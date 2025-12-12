@@ -47,6 +47,23 @@
   border-color: #171717;
 }
 
+.prioritySelect {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #ebebeb;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #171717;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  min-width: 80px;
+}
+
+.prioritySelect:focus {
+  border-color: #171717;
+}
+
 .button {
   padding: 12px 24px;
   font-size: 16px;
@@ -64,6 +81,63 @@
 }
 
 .button:active {
+  transform: scale(0.98);
+}
+
+.sortControls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 12px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #ebebeb;
+}
+
+.sortLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #171717;
+  font-weight: 500;
+}
+
+.sortSelect {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 2px solid #ebebeb;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #171717;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.sortSelect:focus {
+  border-color: #171717;
+}
+
+.sortOrderButton {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #171717;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: auto;
+}
+
+.sortOrderButton:hover {
+  background-color: #383838;
+}
+
+.sortOrderButton:active {
   transform: scale(0.98);
 }
 
@@ -93,13 +167,48 @@
   background-color: #fafafa;
   border: 1px solid #ebebeb;
   border-radius: 8px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
   gap: 12px;
+  cursor: move;
+  position: relative;
+}
+
+.todoItem.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.todoItem.dragOver {
+  border-color: #171717;
+  box-shadow: 0 0 0 2px rgba(23, 23, 23, 0.1);
 }
 
 .todoItem:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #999999;
+  font-size: 16px;
+  line-height: 1;
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.todoItem:hover .dragHandle {
+  color: #171717;
 }
 
 .checkbox {
@@ -120,6 +229,45 @@
 .todoText.completed {
   text-decoration: line-through;
   color: #999999;
+}
+
+.priorityBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  flex-shrink: 0;
+  min-width: 32px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.priorityBadge:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.priorityBadge:active {
+  transform: scale(0.95);
+}
+
+.priorityBadge.high {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.priorityBadge.medium {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.priorityBadge.low {
+  background-color: #dbeafe;
+  color: #2563eb;
 }
 
 .deleteButton {
@@ -167,6 +315,16 @@
   .button {
     width: 100%;
   }
+
+  .sortControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sortOrderButton {
+    margin-left: 0;
+    width: 100%;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -189,6 +347,44 @@
     border-color: #ededed;
   }
 
+  .prioritySelect {
+    background-color: #171717;
+    border-color: #1a1a1a;
+    color: #ededed;
+  }
+
+  .prioritySelect:focus {
+    border-color: #ededed;
+  }
+
+  .sortControls {
+    background-color: #171717;
+    border-color: #1a1a1a;
+  }
+
+  .sortLabel {
+    color: #ededed;
+  }
+
+  .sortSelect {
+    background-color: #171717;
+    border-color: #1a1a1a;
+    color: #ededed;
+  }
+
+  .sortSelect:focus {
+    border-color: #ededed;
+  }
+
+  .sortOrderButton {
+    background-color: #ededed;
+    color: #0a0a0a;
+  }
+
+  .sortOrderButton:hover {
+    background-color: #cccccc;
+  }
+
   .button {
     background-color: #ededed;
     color: #0a0a0a;
@@ -207,6 +403,19 @@
     border-color: #1a1a1a;
   }
 
+  .todoItem.dragOver {
+    border-color: #ededed;
+    box-shadow: 0 0 0 2px rgba(237, 237, 237, 0.2);
+  }
+
+  .dragHandle {
+    color: #666666;
+  }
+
+  .todoItem:hover .dragHandle {
+    color: #ededed;
+  }
+
   .checkbox {
     accent-color: #ededed;
   }
@@ -217,6 +426,21 @@
 
   .todoText.completed {
     color: #666666;
+  }
+
+  .priorityBadge.high {
+    background-color: #7f1d1d;
+    color: #fca5a5;
+  }
+
+  .priorityBadge.medium {
+    background-color: #78350f;
+    color: #fcd34d;
+  }
+
+  .priorityBadge.low {
+    background-color: #1e3a8a;
+    color: #93c5fd;
   }
 
   .deleteButton {
