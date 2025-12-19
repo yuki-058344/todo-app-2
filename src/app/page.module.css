@@ -84,6 +84,22 @@
   transform: scale(0.98);
 }
 
+.errorMessage {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.loadingMessage {
+  text-align: center;
+  color: #666666;
+  font-size: 16px;
+  padding: 40px 0;
+}
+
 .sortControls {
   display: flex;
   align-items: center;
@@ -395,6 +411,15 @@
   }
 
   .emptyMessage {
+    color: #999999;
+  }
+
+  .errorMessage {
+    background-color: #7f1d1d;
+    color: #fca5a5;
+  }
+
+  .loadingMessage {
     color: #999999;
   }
 
