@@ -9,6 +9,7 @@ interface TodoListProps {
   onToggleTodo: (id: string) => void;
   onUpdatePriority: (id: string, priority: Priority) => void;
   onReorderTodos: (draggedId: string, targetId: string) => void;
+  onOpenChat: (todo: Todo) => void;
 }
 
 const EMPTY_MESSAGE = 'TODOがありません。新しいTODOを追加してください。';
@@ -19,6 +20,7 @@ export function TodoList({
   onToggleTodo,
   onUpdatePriority,
   onReorderTodos,
+  onOpenChat,
 }: TodoListProps) {
   const [draggedId, setDraggedId] = useState<string | null>(null);
 
@@ -67,6 +69,7 @@ export function TodoList({
             onDrop={handleDrop}
             onDragEnd={handleDragEnd}
             isDragging={draggedId === todo.id}
+            onOpenChat={onOpenChat}
           />
         ))}
       </ul>

@@ -6,6 +6,7 @@ import {
   CreateTodoInput,
   UpdateTodoInput,
 } from '@/types/todo';
+import { createAuditLog } from './auditLogs';
 
 // データベース行をTodo型に変換
 function rowToTodo(row: TodoRow): Todo {
@@ -63,7 +64,16 @@ export async function createTodo(input: CreateTodoInput): Promise<Todo> {
     throw new Error(`Failed to create todo: ${error.message}`);
   }
 
-  return rowToTodo(data as TodoRow);
+  const todo = rowToTodo(data as TodoRow);
+
+  // 監査ログを記録
+  await createAuditLog({
+    action: 'create',
+    targetId: todo.id,
+    description: `TODOを作成: "${todo.text}"`,
+  });
+
+  return todo;
 }
 
 // 更新
@@ -94,12 +104,30 @@ export async function updateTodo(
 }
 
 // 削除
-export async function deleteTodo(id: string): Promise<void> {
+export async function deleteTodo(id: string, todoText?: string): Promise<void> {
+  // TODOのテキストを取得（監査ログ用）
+  let text = todoText;
+  if (!text) {
+    const { data: todoData } = await supabase
+      .from('todos')
+      .select('text')
+      .eq('id', id)
+      .single();
+    text = todoData?.text || '不明';
+  }
+
   const { error } = await supabase.from('todos').delete().eq('id', id);
 
   if (error) {
     throw new Error(`Failed to delete todo: ${error.message}`);
   }
+
+  // 監査ログを記録
+  await createAuditLog({
+    action: 'delete',
+    targetId: id,
+    description: `TODOを削除: "${text}"`,
+  });
 }
 
 // 完了状態をトグル
@@ -107,7 +135,7 @@ export async function toggleTodo(id: string): Promise<Todo> {
   // 現在の状態を取得
   const { data: currentData, error: fetchError } = await supabase
     .from('todos')
-    .select('completed')
+    .select('completed, text')
     .eq('id', id)
     .single();
 
@@ -115,10 +143,12 @@ export async function toggleTodo(id: string): Promise<Todo> {
     throw new Error(`Failed to fetch todo: ${fetchError.message}`);
   }
 
+  const newCompleted = !currentData.completed;
+
   // 反転して更新
   const { data, error } = await supabase
     .from('todos')
-    .update({ completed: !currentData.completed })
+    .update({ completed: newCompleted })
     .eq('id', id)
     .select()
     .single();
@@ -127,7 +157,16 @@ export async function toggleTodo(id: string): Promise<Todo> {
     throw new Error(`Failed to toggle todo: ${error.message}`);
   }
 
-  return rowToTodo(data as TodoRow);
+  const todo = rowToTodo(data as TodoRow);
+
+  // 監査ログを記録
+  await createAuditLog({
+    action: 'toggle',
+    targetId: id,
+    description: `TODOを${newCompleted ? '完了' : '未完了'}に変更: "${currentData.text}"`,
+  });
+
+  return todo;
 }
 
 // 優先順位を更新
@@ -135,7 +174,29 @@ export async function updatePriority(
   id: string,
   priority: Priority
 ): Promise<Todo> {
-  return updateTodo(id, { priority });
+  // 現在のテキストを取得（監査ログ用）
+  const { data: currentData } = await supabase
+    .from('todos')
+    .select('text, priority')
+    .eq('id', id)
+    .single();
+
+  const priorityLabels: Record<Priority, string> = {
+    high: '高',
+    medium: '中',
+    low: '低',
+  };
+
+  const todo = await updateTodo(id, { priority });
+
+  // 監査ログを記録
+  await createAuditLog({
+    action: 'priority',
+    targetId: id,
+    description: `優先順位を${priorityLabels[currentData?.priority as Priority] || '不明'}→${priorityLabels[priority]}に変更: "${currentData?.text || '不明'}"`,
+  });
+
+  return todo;
 }
 
 // 順序を変更（ドラッグ&ドロップ用）
@@ -150,9 +211,11 @@ export async function reorderTodos(
 
   if (draggedIndex === -1 || targetIndex === -1) return;
 
+  const draggedTodo = todos[draggedIndex];
+
   const newTodos = [...todos];
-  const [draggedTodo] = newTodos.splice(draggedIndex, 1);
-  newTodos.splice(targetIndex, 0, draggedTodo);
+  const [removed] = newTodos.splice(draggedIndex, 1);
+  newTodos.splice(targetIndex, 0, removed);
 
   // バッチ更新
   const updates = newTodos.map((todo, index) => ({
@@ -171,5 +234,11 @@ export async function reorderTodos(
       throw new Error(`Failed to reorder todos: ${error.message}`);
     }
   }
-}
 
+  // 監査ログを記録
+  await createAuditLog({
+    action: 'reorder',
+    targetId: draggedId,
+    description: `TODOの順序を変更: "${draggedTodo.text}"を${draggedIndex + 1}番目→${targetIndex + 1}番目に移動`,
+  });
+}
