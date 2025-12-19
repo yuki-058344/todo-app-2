@@ -13,6 +13,7 @@ interface TodoItemProps {
   onDrop: (e: React.DragEvent, id: string) => void;
   onDragEnd: () => void;
   isDragging: boolean;
+  onOpenChat: (todo: Todo) => void;
 }
 
 const priorityLabels: Record<Priority, string> = {
@@ -32,6 +33,7 @@ export function TodoItem({
   onDrop,
   onDragEnd,
   isDragging,
+  onOpenChat,
 }: TodoItemProps) {
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
@@ -111,6 +113,14 @@ export function TodoItem({
         {priorityLabels[todo.priority]}
       </button>
       <button
+        onClick={() => onOpenChat(todo)}
+        className={styles.chatButton}
+        aria-label="チャットを開く"
+        type="button"
+      >
+        💬
+      </button>
+      <button
         onClick={handleDelete}
         className={styles.deleteButton}
         aria-label="削除"
@@ -120,4 +130,3 @@ export function TodoItem({
     </li>
   );
 }
-
